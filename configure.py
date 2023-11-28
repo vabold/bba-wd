@@ -220,6 +220,15 @@ config.libs = [
             Object(NonMatching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
         ],
     },
+    {
+        "lib": "EGG",
+        "mw_version": config.linker_version,
+        "cflags": cflags_base,
+        "host": True,
+        "objects": [
+            Object(NonMatching, "egg/core/SceneManager.cpp"),
+        ],
+    },
 ]
 
 if args.mode == "configure":
