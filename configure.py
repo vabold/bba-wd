@@ -150,7 +150,7 @@ cflags_base = [
     "-RTTI off",
     "-fp_contract on",
     "-str reuse",
-	"-multibyte", # For Wii compilers, replace with `-enc SJIS`
+	"-enc SJIS", # For Wii compilers, replace with `-enc SJIS`
     "-i include",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
@@ -177,6 +177,13 @@ cflags_rel = [
     *cflags_base,
     "-sdata 0",
     "-sdata2 0",
+]
+
+# EGG library flags
+cflags_egg = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-ipa file",
 ]
 
 config.linker_version = "GC/3.0a5.2"
@@ -223,10 +230,10 @@ config.libs = [
     {
         "lib": "EGG",
         "mw_version": config.linker_version,
-        "cflags": cflags_base,
+        "cflags": cflags_egg,
         "host": True,
         "objects": [
-            Object(NonMatching, "egg/core/SceneManager.cpp"),
+            Object(Matching, "egg/core/eggSceneManager.cpp"),
         ],
     },
 ]
