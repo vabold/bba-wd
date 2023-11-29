@@ -15,8 +15,10 @@ public:
         ToU32ref() = val;
     }
 
-    u32 &ToU32ref() { return *reinterpret_cast<u32 *>(this); }
+    u32 &ToU32ref() {
+        return *reinterpret_cast<u32 *>(this);
+    }
 };
 
-} // namespace nw4r::ut
+} // namespace ut
 } // namespace nw4r
