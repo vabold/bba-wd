@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Common.h>
+#include <egg/core/eggDisposer.h>
 
 namespace EGG {
 
-class Heap {
+class Heap : Disposer {
 public:
     virtual ~Heap();
     virtual void vf_0c();
@@ -27,6 +27,16 @@ public:
         setFlag(0);
     }
 
+    void appendDisposer(Disposer *disposer) {
+        nw4r::ut::List_Append(&mChildren, disposer);
+    }
+
+    void removeDisposer(Disposer *disposer) {
+        nw4r::ut::List_Remove(&mChildren, disposer);
+    }
+
+    static Heap *findContainHeap(void *memBlock);
+
 private:
     // HACK: Avoid defining TBitFlag for now
     bool hasFlag(u8 idx) volatile {
@@ -43,8 +53,10 @@ private:
         mFlags &= ~(1 << idx);
     }
 
-    u8 _04[0x1c - 0x04];
+    u8 _10[0x1c - 0x10];
     u16 mFlags;
+    u8 _1e[0x28 - 0x1e];
+    nw4r::ut::List mChildren;
 };
 
 } // namespace EGG
