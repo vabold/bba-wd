@@ -13,7 +13,6 @@ public:
     virtual void vf_18();
     virtual void destroy();
 
-
     void becomeCurrentHeap();
 
     bool tstDisableAllocation() {

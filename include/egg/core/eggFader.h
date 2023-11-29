@@ -24,4 +24,4 @@ private:
     EStatus mStatus;
 };
 
-}
+} // namespace EGG

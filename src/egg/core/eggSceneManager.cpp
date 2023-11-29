@@ -232,7 +232,9 @@ void SceneManager::destroyScene(Scene *pScene) {
     pScene->getHeap_Mem1()->destroy();
     pScene->getHeap_Mem2()->destroy();
 
-    Heap *nextHeap = parent ? parent->getHeap() : !bUseMem2 ? BaseSystem::sSystem->mRootHeapMem1 : BaseSystem::sSystem->mRootHeapMem2;
+    Heap *nextHeap = parent ? parent->getHeap() :
+            !bUseMem2       ? BaseSystem::sSystem->mRootHeapMem1 :
+                              BaseSystem::sSystem->mRootHeapMem2;
     GXFlush();
     GXDrawDone();
     nextHeap->becomeCurrentHeap();
@@ -388,7 +390,9 @@ void SceneManager::destroySceneOnly(Scene *pScene) {
     pScene->getHeap_Mem1()->destroy();
     pScene->getHeap_Mem2()->destroy();
 
-    Heap *nextHeap = parent ? parent->getHeap() : !bUseMem2 ? BaseSystem::sSystem->mRootHeapMem1 : BaseSystem::sSystem->mRootHeapMem2;
+    Heap *nextHeap = parent ? parent->getHeap() :
+            !bUseMem2       ? BaseSystem::sSystem->mRootHeapMem1 :
+                              BaseSystem::sSystem->mRootHeapMem2;
     nextHeap->becomeCurrentHeap();
 }
 
