@@ -234,6 +234,7 @@ config.libs = [
         "host": True,
         "objects": [
             Object(Matching, "egg/core/eggSceneManager.cpp"),
+            Object(NonMatching, "egg/core/eggScene.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
         ],
     },

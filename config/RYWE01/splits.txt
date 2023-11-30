@@ -26,6 +26,10 @@ egg/core/eggSceneManager.cpp:
 	.sbss       start:0x804E85C8 end:0x804E85D8
 	.sdata2     start:0x804EA750 end:0x804EA760
 
+egg/core/eggScene.cpp:
+	.text       start:0x80179850 end:0x80179914
+	.data       start:0x803E1550 end:0x803E1578
+
 egg/core/eggDisposer.cpp:
 	.text       start:0x8017A764 end:0x8017A82C
 	.data       start:0x803E15C0 end:0x803E15D0
