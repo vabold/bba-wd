@@ -11,7 +11,7 @@ public:
         *this = val;
     }
 
-    Color &operator=(u32 val) {
+    void operator=(u32 val) {
         ToU32ref() = val;
     }
 

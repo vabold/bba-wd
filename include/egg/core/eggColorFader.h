@@ -2,7 +2,7 @@
 
 #include <egg/core/eggFader.h>
 
-#include <nw4r/ut/ut_Color.h>
+#include <nw4r/ut/Color.h>
 
 namespace EGG {
 
