@@ -4,10 +4,20 @@
 
 namespace EGG {
 
+class ExpHeap;
+
 class Heap : Disposer {
 public:
+    enum eHeapKind {
+        HEAP_KIND_NONE,
+        HEAP_KIND_EXPANDED,
+        HEAP_KIND_FRAME,
+        HEAP_KIND_UNIT,
+        HEAP_KIND_ASSERT
+    };
+
     virtual ~Heap();
-    virtual void vf_0c();
+    virtual eHeapKind getHeapKind() const = 0;
     virtual void vf_10();
     virtual void vf_14();
     virtual void vf_18();
@@ -33,6 +43,14 @@ public:
 
     void removeDisposer(Disposer *disposer) {
         nw4r::ut::List_Remove(&mChildren, disposer);
+    }
+
+    ExpHeap *dynamicCastToExp() {
+        if (getHeapKind() == HEAP_KIND_EXPANDED) {
+            return reinterpret_cast<ExpHeap *>(this);
+        }
+
+        return NULL;
     }
 
     static Heap *findContainHeap(void *memBlock);

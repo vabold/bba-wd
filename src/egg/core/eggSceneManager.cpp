@@ -1,7 +1,6 @@
 #include <egg/core/eggSceneManager.h>
 
 #include <egg/core/eggDisplay.h>
-#include <egg/core/eggExpHeap.h>
 #include <egg/core/eggSystem.h>
 
 #include <sdk/GXMisc.h>
@@ -9,7 +8,7 @@
 namespace EGG {
 
 SceneManager::SceneManager(SceneCreator *creator) {
-    mCreator = creator;
+    mSceneCreator = creator;
     mCurrentScene = NULL;
     mPrevSceneId = -1;
     mCurrentSceneId = -1;
@@ -66,7 +65,15 @@ void SceneManager::changeScene(s32 id) {
 }
 
 bool SceneManager::changeSceneAfterFadeOut(s32 id) {
-    // Unknown function body
+    bool fadedOut = false;
+
+    if (mFadeType == FADE_TYPE_IDLE && fadeOut()) {
+        setNextSceneID(id);
+        setAfterFadeType(FADE_TYPE_CHANGE_SCENE);
+        fadedOut = true;
+    }
+
+    return fadedOut;
 }
 
 void SceneManager::changeSiblingScene(s32 id) {
@@ -128,10 +135,10 @@ void SceneManager::createScene(s32 id, Scene *parent) {
 
     if (pParentHeap == pParentHeap_Mem2) {
         pNewHeap_Mem1 = ExpHeap::create(-1, pParentHeap_Mem1, sHeapOptionFlg);
-        pNewHeap_Mem2 = dynamic_cast<ExpHeap *>(pNewHeap);
+        pNewHeap_Mem2 = pNewHeap;
     } else {
         pNewHeap_Mem2 = ExpHeap::create(-1, pParentHeap_Mem2, sHeapOptionFlg);
-        pNewHeap_Mem1 = dynamic_cast<ExpHeap *>(pNewHeap);
+        pNewHeap_Mem1 = pNewHeap;
     }
 
     sHeapMem1_ForCreateScene = pNewHeap_Mem1;
@@ -143,7 +150,7 @@ void SceneManager::createScene(s32 id, Scene *parent) {
 
     pNewHeap->becomeCurrentHeap();
 
-    Scene *pNewScene = mCreator->create(id);
+    Scene *pNewScene = mSceneCreator->create(id);
 
     if (parent) {
         parent->setChildScene(pNewScene);
@@ -161,6 +168,18 @@ void SceneManager::createChildScene(s32 id, Scene *parent) {
     setNextSceneID(id);
     setupNextSceneID();
     createScene(id, parent);
+}
+
+bool SceneManager::createChildSceneAfterFadeOut(s32 id, Scene *pParent) {
+    bool fadedOut = false;
+
+    if (mFadeType == FADE_TYPE_IDLE && fadeOut()) {
+        setNextSceneID(id);
+        fadedOut = true;
+        mParentScene = pParent;
+    }
+
+    return fadedOut;
 }
 
 bool SceneManager::destroyCurrentSceneNoIncoming(bool destroyRootIfNoParent) {
@@ -193,6 +212,11 @@ bool SceneManager::destroyCurrentScene() {
     return ret;
 }
 
+bool SceneManager::destroyCurrentSceneAfterFadeOut() {
+    // Unknown function body
+    return false;
+}
+
 bool SceneManager::destroyToSelectSceneID(s32 id) {
     bool ret = false;
 
@@ -208,6 +232,18 @@ bool SceneManager::destroyToSelectSceneID(s32 id) {
     return ret;
 }
 
+bool SceneManager::destroyToSelectSceneIDAfterFadeOut(s32 id) {
+    bool fadedOut = false;
+
+    if (mFadeType == FADE_TYPE_IDLE && fadeOut()) {
+        setNextSceneID(id);
+        fadedOut = true;
+        setAfterFadeType(FADE_TYPE_DESTROY_TO_SELECT);
+    }
+
+    return fadedOut;
+}
+
 void SceneManager::destroyScene(Scene *pScene) {
     pScene->exit();
     GXFlush();
@@ -221,7 +257,7 @@ void SceneManager::destroyScene(Scene *pScene) {
     GXDrawDone();
 
     Scene *parent = pScene->getParentScene();
-    mCreator->destroy(pScene->getSceneID());
+    mSceneCreator->destroy(pScene->getSceneID());
     mCurrentScene = NULL;
 
     if (parent) {
@@ -232,12 +268,12 @@ void SceneManager::destroyScene(Scene *pScene) {
     pScene->getHeap_Mem1()->destroy();
     pScene->getHeap_Mem2()->destroy();
 
-    Heap *nextHeap = parent ? parent->getHeap() :
-            !bUseMem2       ? BaseSystem::sSystem->mRootHeapMem1 :
-                              BaseSystem::sSystem->mRootHeapMem2;
+    Heap *pParentHeap = parent ? parent->getHeap() :
+            !bUseMem2          ? BaseSystem::sSystem->mRootHeapMem1 :
+                                 BaseSystem::sSystem->mRootHeapMem2;
     GXFlush();
     GXDrawDone();
-    nextHeap->becomeCurrentHeap();
+    pParentHeap->becomeCurrentHeap();
     GXFlush();
     GXDrawDone();
 }
@@ -270,12 +306,12 @@ void SceneManager::calcCurrentFader() {
     case FADE_TYPE_CHANGE_SIBLING_SCENE:
         changeSiblingScene();
         break;
-    case FADE_TYPE_OUTGOING:
-        outgoingParentScene(pParent);
+    case FADE_TYPE_CREATE_CHILD_SCENE:
+        outgoingParentScene(mParentScene);
         setupNextSceneID();
-        createScene(mCurrentSceneId, pParent);
+        createScene(mCurrentSceneId, mParentScene);
         break;
-    case FADE_TYPE_INCOMING:
+    case FADE_TYPE_DESTROY_TO_SELECT:
         destroyToSelectSceneID(mNextSceneId);
         break;
     case FADE_TYPE_REINITIALIZE:
@@ -306,8 +342,8 @@ void SceneManager::setupNextSceneID() {
     mNextSceneId = -1;
 }
 
-void SceneManager::outgoingParentScene(Scene *parent) {
-    parent->outgoing_childCreate();
+void SceneManager::outgoingParentScene(Scene *pParent) {
+    pParent->outgoing_childCreate();
 }
 
 Scene *SceneManager::findParentScene(s32 id) {
@@ -322,6 +358,10 @@ Scene *SceneManager::findParentScene(s32 id) {
     }
 
     return found ? scene : NULL;
+}
+
+ExpHeap *SceneManager::getCurrentSceneExpHeap() const {
+    return getCurrentScene()->getHeap()->dynamicCastToExp();
 }
 
 Scene *SceneManager::createSceneOnly(s32 id, Scene *parent) {
@@ -350,10 +390,10 @@ Scene *SceneManager::createSceneOnly(s32 id, Scene *parent) {
 
     if (pParentHeap == pParentHeap_Mem2) {
         pNewHeap_Mem1 = ExpHeap::create(-1, pParentHeap_Mem1, sHeapOptionFlg);
-        pNewHeap_Mem2 = dynamic_cast<ExpHeap *>(pNewHeap);
+        pNewHeap_Mem2 = pNewHeap;
     } else {
         pNewHeap_Mem2 = ExpHeap::create(-1, pParentHeap_Mem2, sHeapOptionFlg);
-        pNewHeap_Mem1 = dynamic_cast<ExpHeap *>(pNewHeap);
+        pNewHeap_Mem1 = pNewHeap;
     }
 
     sHeapMem1_ForCreateScene = pNewHeap_Mem1;
@@ -365,7 +405,7 @@ Scene *SceneManager::createSceneOnly(s32 id, Scene *parent) {
 
     pNewHeap->becomeCurrentHeap();
 
-    Scene *pNewScene = mCreator->create(id);
+    Scene *pNewScene = mSceneCreator->create(id);
 
     pNewScene->setSceneID(id);
     pNewScene->setParentScene(parent);
@@ -385,7 +425,7 @@ void SceneManager::destroySceneOnly(Scene *pScene) {
     GXDrawDone();
 
     Scene *parent = pScene->getParentScene();
-    mCreator->destroy(pScene->getSceneID());
+    mSceneCreator->destroy(pScene->getSceneID());
 
     pScene->getHeap_Mem1()->destroy();
     pScene->getHeap_Mem2()->destroy();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <egg/core/eggColorFader.h>
+#include <egg/core/eggExpHeap.h>
 #include <egg/core/eggScene.h>
 #include <egg/core/eggSceneCreator.h>
 
@@ -14,9 +15,9 @@ public:
         FADE_TYPE_IDLE = -1,
         FADE_TYPE_CHANGE_SCENE = 0,
         FADE_TYPE_CHANGE_SIBLING_SCENE = 1,
-        FADE_TYPE_OUTGOING = 2,
+        FADE_TYPE_CREATE_CHILD_SCENE = 2,
         FADE_TYPE_REINITIALIZE = 3,
-        FADE_TYPE_INCOMING = 4
+        FADE_TYPE_DESTROY_TO_SELECT = 4
     };
 
     SceneManager(SceneCreator *);
@@ -35,23 +36,30 @@ public:
 
     void reinitCurrentScene();
     bool reinitCurrentSceneAfterFadeOut();
+
     void changeScene(s32 id);
     bool changeSceneAfterFadeOut(s32 id);
     void changeSiblingScene(s32 id);
     bool changeSiblingSceneAfterFadeOut(s32 id);
     void changeSiblingScene();
+
     void createScene(s32 id, Scene *parent);
     void createChildScene(s32 id, Scene *parent);
-    bool createChildSceneAfterFadeOut(s32 id, Scene *parent);
-    bool destroyCurrentScene();
-    bool destroyToSelectSceneID(s32 id);
+    bool createChildSceneAfterFadeOut(s32 id, Scene *pParent);
+
     bool destroyCurrentSceneNoIncoming(bool destroyRootIfNoParent);
+    bool destroyCurrentScene();
+    bool destroyCurrentSceneAfterFadeOut();
+    bool destroyToSelectSceneID(s32 id);
+    bool destroyToSelectSceneIDAfterFadeOut(s32 id);
     void destroyScene(Scene *scene);
+
     void incomingCurrentScene();
 
     void setupNextSceneID();
-    void outgoingParentScene(Scene *parent);
+    void outgoingParentScene(Scene *pParent);
     Scene *findParentScene(s32 id);
+    ExpHeap *getCurrentSceneExpHeap() const;
     Scene *createSceneOnly(s32 id, Scene *parent);
     void destroySceneOnly(Scene *scene);
 
@@ -72,7 +80,7 @@ public:
     }
 
     void setCreator(SceneCreator *creator) {
-        mCreator = creator;
+        mSceneCreator = creator;
     }
 
     void setNextSceneID(s32 id) {
@@ -84,10 +92,10 @@ public:
     }
 
 private:
-    SceneCreator *mCreator;
+    SceneCreator *mSceneCreator;
     u8 _08[0x0c - 0x08];
     Scene *mCurrentScene;
-    Scene *pParent;
+    Scene *mParentScene;
     s32 mNextSceneId;
     s32 mCurrentSceneId;
     s32 mPrevSceneId;
