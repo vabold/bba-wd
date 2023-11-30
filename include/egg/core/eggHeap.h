@@ -45,12 +45,16 @@ public:
         nw4r::ut::List_Remove(&mChildren, disposer);
     }
 
-    ExpHeap *dynamicCastToExp() {
-        if (getHeapKind() == HEAP_KIND_EXPANDED) {
-            return reinterpret_cast<ExpHeap *>(this);
+    static ExpHeap *dynamicCastToExp(Heap *heap) {
+        if (heap->getHeapKind() == HEAP_KIND_EXPANDED) {
+            return reinterpret_cast<ExpHeap *>(heap);
         }
 
         return NULL;
+    }
+
+    static Heap *getCurrentHeap() {
+        return sCurrentHeap;
     }
 
     static Heap *findContainHeap(void *memBlock);
@@ -75,6 +79,8 @@ private:
     u16 mFlags;
     u8 _1e[0x28 - 0x1e];
     nw4r::ut::List mChildren;
+
+    static Heap *sCurrentHeap;
 };
 
 } // namespace EGG
