@@ -361,7 +361,7 @@ Scene *SceneManager::findParentScene(s32 id) {
 }
 
 ExpHeap *SceneManager::getCurrentSceneExpHeap() const {
-    return getCurrentScene()->getHeap()->dynamicCastToExp();
+    return Heap::dynamicCastToExp(getCurrentScene()->getHeap());
 }
 
 Scene *SceneManager::createSceneOnly(s32 id, Scene *parent) {

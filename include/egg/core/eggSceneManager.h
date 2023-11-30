@@ -91,6 +91,14 @@ public:
         mFadeType = type;
     }
 
+    static Heap *getHeapMem1_ForCreateScene() {
+        return sHeapMem1_ForCreateScene;
+    }
+
+    static Heap *getHeapMem2_ForCreateScene() {
+        return sHeapMem2_ForCreateScene;
+    }
+
 private:
     SceneCreator *mSceneCreator;
     u8 _08[0x0c - 0x08];

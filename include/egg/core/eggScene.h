@@ -6,8 +6,10 @@ namespace EGG {
 
 class SceneManager;
 
-class Scene {
+class Scene : Disposer {
 public:
+    Scene();
+
     virtual ~Scene();
     virtual void calc() {}
     virtual void draw() {}
@@ -50,7 +52,6 @@ public:
     }
 
 private:
-    u8 _04[0x10 - 0x04];
     Heap *mHeap;
     Heap *mHeap_Mem1;
     Heap *mHeap_Mem2;
