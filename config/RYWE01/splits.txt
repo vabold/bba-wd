@@ -20,6 +20,14 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.dtors      start:0x8038C7E4 end:0x8038C7E8 rename:.dtors$15
 	.sdata      start:0x804E6070 end:0x804E6078
 
+egg/core/eggHeap.cpp:
+	.text       start:0x8017128C end:0x80171C18
+	.rodata     start:0x8039F238 end:0x8039F318
+	.data       start:0x803E12D0 end:0x803E1300
+	.bss        start:0x80476BA0 end:0x80476BC8
+	.sbss       start:0x804E8588 end:0x804E85A8
+	.sdata2     start:0x804EA730 end:0x804EA748
+
 egg/core/eggSceneManager.cpp:
 	.text       start:0x801732A4 end:0x80173F84
 	.data       start:0x803E1380 end:0x803E13A8
