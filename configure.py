@@ -184,6 +184,7 @@ cflags_egg = [
     *cflags_base,
     "-use_lmw_stmw on",
     "-ipa file",
+    "-rostr",
 ]
 
 config.linker_version = "GC/3.0a5.2"
@@ -233,7 +234,7 @@ config.libs = [
         "cflags": cflags_egg,
         "host": True,
         "objects": [
-            Object(NonMatching, "egg/core/eggHeap.cpp"),
+            Object(Matching, "egg/core/eggHeap.cpp"),
             Object(Matching, "egg/core/eggSceneManager.cpp"),
             Object(Matching, "egg/core/eggScene.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
