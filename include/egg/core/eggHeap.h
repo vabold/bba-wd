@@ -1,10 +1,32 @@
 #pragma once
 
 #include <egg/core/eggDisposer.h>
+#include <sdk/OSMutex.h>
+#include <sdk/mem/heapCommon.h>
 
 namespace EGG {
 
 class ExpHeap;
+class Thread;
+
+struct HeapErrorArg {
+    const char *name;
+    void *arg;
+};
+
+struct HeapAllocArg {
+    HeapAllocArg() {
+        arg = NULL;
+        size = 0;
+        align = 0;
+        heap = NULL;
+    }
+
+    void *arg;
+    u32 size;
+    int align;
+    Heap *heap;
+};
 
 class Heap : Disposer {
 public:
@@ -16,14 +38,24 @@ public:
         HEAP_KIND_ASSERT
     };
 
+    Heap(MEMiHeapHead *handle);
+
     virtual ~Heap();
     virtual eHeapKind getHeapKind() const = 0;
-    virtual void vf_10();
-    virtual void vf_14();
-    virtual void vf_18();
-    virtual void destroy();
+    virtual void vf_10() = 0;
+    virtual void *alloc(size_t size, s32 align) = 0;
+    virtual void free(void *block) = 0;
+    virtual void destroy() = 0;
+    virtual void vf_20() = 0;
+    virtual s32 getAllocatableSize(s32 align) = 0;
+    virtual void vf_28() = 0;
+    virtual void vf_2c() = 0;
 
-    void becomeCurrentHeap();
+    Heap *findParentHeap();
+    void dispose();
+    void dump();
+    Heap *becomeCurrentHeap();
+    Heap *_becomeCurrentHeapWithoutLock();
 
     bool tstDisableAllocation() {
         return hasFlag(0);
@@ -45,6 +77,25 @@ public:
         nw4r::ut::List_Remove(&mChildren, disposer);
     }
 
+    void *getStartAddress() {
+        return this;
+    }
+
+    void *getEndAddress() {
+        return MEMGetHeapEndAddress(mHeapHandle);
+    }
+
+    const char *getName() {
+        return mName;
+    }
+
+    static void initialize();
+    static void *alloc(size_t size, int align, Heap *heap);
+    static Heap *findHeap(MEMiHeapHead *handle);
+    static Heap *findContainHeap(const void *memBlock);
+    static void free(void *block, Heap *heap);
+    static void dumpAll();
+
     static ExpHeap *dynamicCastToExp(Heap *heap) {
         if (heap->getHeapKind() == HEAP_KIND_EXPANDED) {
             return reinterpret_cast<ExpHeap *>(heap);
@@ -57,7 +108,9 @@ public:
         return sCurrentHeap;
     }
 
-    static Heap *findContainHeap(void *memBlock);
+    static nw4r::ut::List *getHeapList() {
+        return &sHeapList;
+    }
 
 private:
     // HACK: Avoid defining TBitFlag for now
@@ -75,12 +128,34 @@ private:
         mFlags &= ~(1 << idx);
     }
 
-    u8 _10[0x1c - 0x10];
+    MEMiHeapHead *mHeapHandle;
+    u32 _14;
+    Heap *mParentHeap;
     u16 mFlags;
     u8 _1e[0x28 - 0x1e];
     nw4r::ut::List mChildren;
+    const char *mName;
+
+    static nw4r::ut::List sHeapList;
+    static OSMutex sRootMutex;
 
     static Heap *sCurrentHeap;
+    static BOOL sIsHeapListInitialized;
+    static Heap *sAllocatableHeap;
+    static void (*sErrorCallback)(const HeapErrorArg &arg);
+    static void (*sAllocCallback)(const HeapAllocArg &arg);
+    static void *sErrorCallbackArg;
+    static void *sAllocCallbackArg;
+    static Thread *sAllocatableThread;
 };
 
 } // namespace EGG
+
+void *operator new(size_t size);
+void *operator new(size_t size, int align);
+void *operator new(size_t size, EGG::Heap *heap, int align);
+void *operator new[](size_t size);
+void *operator new[](size_t size, int align);
+void *operator new[](size_t size, EGG::Heap *heap, int align);
+void operator delete(void *block);
+void operator delete[](void *block);

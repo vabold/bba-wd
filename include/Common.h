@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMON_H
+#define COMMON_H
 
 #ifndef NULL
 #define NULL 0
@@ -16,5 +17,9 @@ typedef unsigned long long u64;
 typedef float f32;
 typedef float f64;
 
+typedef u32 size_t;
+
 typedef int BOOL;
 enum { FALSE, TRUE };
+
+#endif
