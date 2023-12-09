@@ -6,6 +6,7 @@
 
 namespace EGG {
 
+class Allocator;
 class ExpHeap;
 class Thread;
 
@@ -42,7 +43,7 @@ public:
 
     virtual ~Heap();
     virtual eHeapKind getHeapKind() const = 0;
-    virtual void vf_10() = 0;
+    virtual void initAllocator(Allocator *allocator, s32 align) = 0;
     virtual void *alloc(size_t size, s32 align) = 0;
     virtual void free(void *block) = 0;
     virtual void destroy() = 0;
