@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct MEMiHeapHead {
     u8 _00[0x1c - 0x00];
     void *heapEnd;
 } MEMiHeapHead;

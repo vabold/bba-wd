@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 void OSReport(const char *fmt, ...);
+void OSPanic(const char *fmt, ...);
 
 #ifdef __cplusplus
 }
