@@ -51,3 +51,9 @@ egg/core/eggScene.cpp:
 egg/core/eggDisposer.cpp:
 	.text       start:0x8017A764 end:0x8017A82C
 	.data       start:0x803E15C0 end:0x803E15D0
+
+egg/core/eggArchive.cpp:
+	.text       start:0x8017A82C end:0x8017AABC
+	.data       start:0x803E15D0 end:0x803E15E0
+	.bss        start:0x80477B50 end:0x80477B60
+	.sbss       start:0x804E8608 end:0x804E8610
