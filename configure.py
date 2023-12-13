@@ -240,6 +240,7 @@ config.libs = [
             Object(Matching, "egg/core/eggSceneManager.cpp"),
             Object(Matching, "egg/core/eggScene.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
+            Object(NonMatching, "egg/core/eggArchive.cpp"),
         ],
     },
 ]
