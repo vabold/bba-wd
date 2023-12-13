@@ -13,7 +13,7 @@ void Heap::initialize() {
 
 Heap::Heap(MEMiHeapHead *handle) {
     mHeapHandle = handle;
-    _14 = 0;
+    mBlock = NULL;
     mParentHeap = NULL;
     mName = "NoName";
     mFlags = 0;

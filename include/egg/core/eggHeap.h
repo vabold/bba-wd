@@ -47,10 +47,9 @@ public:
     virtual void *alloc(size_t size, s32 align) = 0;
     virtual void free(void *block) = 0;
     virtual void destroy() = 0;
-    virtual void vf_20() = 0;
-    virtual s32 getAllocatableSize(s32 align) = 0;
-    virtual void vf_28() = 0;
-    virtual void vf_2c() = 0;
+    virtual u32 resizeForMBlock(void *block, u32 size) = 0;
+    virtual u32 getAllocatableSize(s32 align) = 0;
+    virtual u32 adjust() = 0;
 
     Heap *findParentHeap();
     void dispose();
@@ -78,6 +77,10 @@ public:
         nw4r::ut::List_Remove(&mChildren, disposer);
     }
 
+    void registerHeapBuffer(void *block) {
+        mBlock = block;
+    }
+
     void *getStartAddress() {
         return this;
     }
@@ -97,6 +100,10 @@ public:
     static void free(void *block, Heap *heap);
     static void dumpAll();
 
+    static void *addOffset(void *address, u32 offset) {
+        return (void*)((u32)address + offset);
+    }
+
     static ExpHeap *dynamicCastToExp(Heap *heap) {
         if (heap->getHeapKind() == HEAP_KIND_EXPANDED) {
             return reinterpret_cast<ExpHeap *>(heap);
@@ -113,7 +120,7 @@ public:
         return &sHeapList;
     }
 
-private:
+protected:
     // HACK: Avoid defining TBitFlag for now
     bool hasFlag(u8 idx) volatile {
         return mFlags & 1 << idx;
@@ -130,7 +137,7 @@ private:
     }
 
     MEMiHeapHead *mHeapHandle;
-    u32 _14;
+    void *mBlock;
     Heap *mParentHeap;
     u16 mFlags;
     u8 _1e[0x28 - 0x1e];
@@ -160,3 +167,7 @@ void *operator new[](size_t size, int align);
 void *operator new[](size_t size, EGG::Heap *heap, int align);
 void operator delete(void *block);
 void operator delete[](void *block);
+
+inline void *operator new(size_t size, void *block) {
+    return block;
+}
