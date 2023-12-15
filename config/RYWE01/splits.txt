@@ -20,6 +20,10 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.dtors      start:0x8038C7E4 end:0x8038C7E8 rename:.dtors$15
 	.sdata      start:0x804E6070 end:0x804E6078
 
+egg/math/eggBoundBox.cpp:
+	.text       start:0x80170CE8 end:0x80170E2C
+	.sdata2     start:0x804EA728 end:0x804EA730
+
 egg/core/eggExpHeap.cpp:
 	.text       start:0x80170E2C end:0x8017128C
 	.rodata     start:0x8039F218 end:0x8039F238
