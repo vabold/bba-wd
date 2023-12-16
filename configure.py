@@ -148,9 +148,8 @@ cflags_base = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    "-fp_contract on",
     "-str reuse",
-	"-enc SJIS", # For Wii compilers, replace with `-enc SJIS`
+	"-enc SJIS",
     "-i include",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
@@ -234,7 +233,7 @@ config.libs = [
         "cflags": cflags_egg,
         "host": True,
         "objects": [
-            Object(NonMatching, "egg/math/eggBoundBox.cpp"),
+            Object(Matching, "egg/math/eggBoundBox.cpp"),
             Object(Matching, "egg/core/eggExpHeap.cpp"),
             Object(Matching, "egg/core/eggHeap.cpp"),
             Object(Matching, "egg/core/eggAllocator.cpp"),

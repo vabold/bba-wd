@@ -5,6 +5,10 @@
 #define NULL 0
 #endif
 
+#ifndef FLT_MAX
+#define FLT_MAX 3.4028235e+38f
+#endif
+
 typedef signed char s8;
 typedef signed short s16;
 typedef signed long s32;
