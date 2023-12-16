@@ -234,7 +234,7 @@ config.libs = [
         "cflags": cflags_egg,
         "host": True,
         "objects": [
-            Object(NonMatching, "egg/geom/eggSphere.cpp"),
+            Object(Matching, "egg/geom/eggSphere.cpp"),
             Object(NonMatching, "egg/math/eggMath.cpp"),
             Object(Matching, "egg/math/eggVector.cpp"),
             Object(Matching, "egg/math/eggBoundBox.cpp"),
