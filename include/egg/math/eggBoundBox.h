@@ -16,8 +16,8 @@ public:
     bool inside(const Vector2f &v) const;
 
 private:
-    Vector2f mMax;
     Vector2f mMin;
+    Vector2f mMax;
 };
 
 class BoundBox3f {
@@ -30,8 +30,8 @@ public:
     void setMax(const Vector3f &max);
 
 private:
-    Vector3f mMax;
     Vector3f mMin;
+    Vector3f mMax;
 };
 
 } // namespace EGG
