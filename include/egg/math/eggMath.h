@@ -11,6 +11,8 @@ struct Math {
         // This is low priority since it will always be a float
         return FLT_MAX;
     }
+
+    static T sqrt(T);
 };
 
 } // namespace EGG

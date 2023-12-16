@@ -148,6 +148,7 @@ cflags_base = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
+    "-fp_contract on",
     "-str reuse",
 	"-enc SJIS",
     "-i include",
@@ -234,7 +235,7 @@ config.libs = [
         "host": True,
         "objects": [
             Object(NonMatching, "egg/math/eggMath.cpp"),
-            Object(NonMatching, "egg/math/eggVector.cpp"),
+            Object(Matching, "egg/math/eggVector.cpp"),
             Object(Matching, "egg/math/eggBoundBox.cpp"),
             Object(Matching, "egg/core/eggExpHeap.cpp"),
             Object(Matching, "egg/core/eggHeap.cpp"),
