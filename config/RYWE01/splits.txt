@@ -20,6 +20,15 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.dtors      start:0x8038C7E4 end:0x8038C7E8 rename:.dtors$15
 	.sdata      start:0x804E6070 end:0x804E6078
 
+egg/math/eggVector.cpp:
+	extab       start:0x80007068 end:0x80007080
+	extabindex  start:0x8000BC6C end:0x8000BC90
+	.text       start:0x80170AD4 end:0x80170CE8
+	.ctors      start:0x8038C678 end:0x8038C67C
+	.bss        start:0x80476B18 end:0x80476BA0
+	.sbss       start:0x804E8570 end:0x804E8588
+	.sdata2     start:0x804EA720 end:0x804EA728
+
 egg/math/eggBoundBox.cpp:
 	.text       start:0x80170CE8 end:0x80170E2C
 	.sdata2     start:0x804EA728 end:0x804EA730
