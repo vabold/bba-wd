@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Common.h>
+#include <sdk/gx/GXFrameBuf.h>
 
 namespace EGG {
 
@@ -10,8 +10,16 @@ public:
         return !(mFlag & 1);
     }
 
+    u16 getFbWidth() {
+        return mObj->fbWidth;
+    }
+
+    u16 getEfbHeight() {
+        return mObj->efbHeight;
+    }
+
 private:
-    u8 _00[0x04 - 0x00];
+    _GXRenderModeObj *mObj;
     u8 mFlag;
 };
 

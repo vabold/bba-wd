@@ -20,6 +20,12 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.dtors      start:0x8038C7E4 end:0x8038C7E8 rename:.dtors$15
 	.sdata      start:0x804E6070 end:0x804E6078
 
+egg/gfx/eggViewport.cpp:
+	extab       start:0x80006F18 end:0x80006F40
+	extabindex  start:0x8000BAEC end:0x8000BB28
+	.text       start:0x8016EB70 end:0x8016EEBC
+	.sdata2     start:0x804EA6B8 end:0x804EA6D0
+
 egg/geom/eggSphere.cpp:
 	.text       start:0x8016F808 end:0x8016F888
 
