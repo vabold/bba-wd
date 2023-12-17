@@ -6,9 +6,9 @@ namespace EGG {
 
 void Quatf::set(f32 fw, f32 fx, f32 fy, f32 fz) {
     w = fw;
-    vec.x = fx;
-    vec.y = fy;
-    vec.z = fz;
+    v.x = fx;
+    v.y = fy;
+    v.z = fz;
 }
 
 void Quatf::setRPY(const EGG::Vector3f &rpy) {
@@ -25,30 +25,30 @@ void Quatf::setRPY(const EGG::Vector3f &rpy) {
     const f32 sy_cp = sy * cp;
 
     w = (cy_cp * cr) + (sy_sp * sr);
-    vec.x = (cy_cp * sr) - (sy_sp * cr);
-    vec.y = (cy_sp * cr) + (sy_cp * sr);
-    vec.z = (sy_cp * cr) - (cy_sp * sr);
+    v.x = (cy_cp * sr) - (sy_sp * cr);
+    v.y = (cy_sp * cr) + (sy_cp * sr);
+    v.z = (sy_cp * cr) - (cy_sp * sr);
 }
 
 Vector3f Quatf::calcRPY() {
     Vector3f rpy;
 
     const f32 ww = w * w;
-    const f32 yy = vec.y * vec.y;
-    const f32 xx = vec.x * vec.x;
-    const f32 zz = vec.z * vec.z;
+    const f32 yy = v.y * v.y;
+    const f32 xx = v.x * v.x;
+    const f32 zz = v.z * v.z;
 
     const f32 a0 = (ww + xx) - yy - zz;
-    const f32 a1 = (vec.x * vec.y + w * vec.z) * 2.0f;
-    const f32 a2 = (vec.x * vec.z - w * vec.y) * 2.0f;
-    const f32 a3 = (vec.y * vec.z + w * vec.x) * 2.0f;
+    const f32 a1 = (v.x * v.y + w * v.z) * 2.0f;
+    const f32 a2 = (v.x * v.z - w * v.y) * 2.0f;
+    const f32 a3 = (v.y * v.z + w * v.x) * 2.0f;
     const f32 a4 = (ww - xx) - yy + zz;
 
     const f32 a5 = Math<f32>::abs(a2);
 
     if (a5 > 0.999999f) {
-        f32 t0 = (vec.x * vec.y - w * vec.z) * 2.0f;
-        f32 t1 = (vec.x * vec.z + w * vec.y) * 2.0f;
+        f32 t0 = (v.x * v.y - w * v.z) * 2.0f;
+        f32 t1 = (v.x * v.z + w * v.y) * 2.0f;
 
         rpy.x = 0.0f;
         rpy.y = a2 / a5 * -Math<f32>::pi_half();
@@ -73,9 +73,9 @@ void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
     set(cos, sin * axis.x, sin * axis.y, sin * axis.z);
 }
 
-// Found in SS, not BBA
+// Found in SS, not BBA(at least with these other funcs)
 // f32 Quatf::norm() {
-//     return w*w + vec.dot(vec);
+//     return w * w + v.dot(v);
 // }
 // void Quatf::normalise() {
 //     f32 mag = Math<f32>::sqrt(norm());
@@ -90,27 +90,27 @@ Quatf Quatf::conjugate() {
 
     Quatf q;
     q.w = w;
-    q.vec = -1.0f * vec;
+    q.v = -1.0f * v;
     return q;
 }
 
-Vector3f Quatf::rotateVector(const Vector3f &rot) {
+Vector3f Quatf::rotateVector(const Vector3f &vec) {
     Quatf conj, mult;
     conj = conjugate();
-    mult = *this * rot;
+    mult = *this * vec;
     mult = mult * conj;
-    return mult.vec;
+    return mult.v;
 }
 
 Quatf operator*(const Quatf &q, const Vector3f &v) {
-    Vector3f crossed = q.vec.cross(v);
+    Vector3f crossed = q.v.cross(v);
     Vector3f scaled = q.w * v;
-    Quatf ret = Quatf(-q.vec.dot(v), crossed + scaled);
+    Quatf ret = Quatf(-q.v.dot(v), crossed + scaled);
     return ret;
 }
 
 void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
-    f32 dot = vec.x * q2.vec.x + vec.y * q2.vec.y + vec.z * q2.vec.z + w * q2.w;
+    f32 dot = v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z + w * q2.w;
 
     if (dot > 1.0f) {
         dot = 1.0f;
@@ -144,9 +144,9 @@ void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
         b = -b;
     }
 
-    out.vec.x = a * vec.x + b * q2.vec.x;
-    out.vec.y = a * vec.y + b * q2.vec.y;
-    out.vec.z = a * vec.z + b * q2.vec.z;
+    out.v.x = a * v.x + b * q2.v.x;
+    out.v.y = a * v.y + b * q2.v.y;
+    out.v.z = a * v.z + b * q2.v.z;
     out.w = a * w + b * q2.w;
 }
 
