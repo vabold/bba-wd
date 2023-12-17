@@ -17,7 +17,7 @@ struct Math {
     }
 
     static T pi_half() {
-        return pi()/2.0f;
+        return pi() / 2.0f;
     }
 
     static T epsilon() {
@@ -28,11 +28,11 @@ struct Math {
         return 1 / t;
     }
 
-    static T abs(T t) { 
+    static T abs(T t) {
         return t > 0 ? t : -t;
     }
 
-    static T sqrt(T); 
+    static T sqrt(T);
     static T sin(T);
     static T cos(T);
     static T tan(T);
