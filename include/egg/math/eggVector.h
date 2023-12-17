@@ -56,6 +56,31 @@ struct Vector3f : public nw4r::math::VEC3 {
         z = _z;
     }
 
+
+    f32 dot(const Vector3f& r) const {
+        return x*r.x+y*r.y+z*r.z;
+    }
+    
+    // TODO: Implement
+    Vector3f cross(const Vector3f& rhs) const {
+        return Vector3f();
+    }
+
+    // TODO: Implement
+    Vector3f operator+(const Vector3f& rhs) const {
+        return Vector3f();
+    };
+
+    Vector3f operator*(f32 f) const { 
+        return Vector3f(x*f, y*f, z*f);
+    }
+    
+    // TODO: Implement
+    friend Vector3f operator*(f32 f, const Vector3f& vec) { 
+        return Vector3f();
+    };
+
+
     static const Vector3f zero;
     static const Vector3f ex;
     static const Vector3f ey;

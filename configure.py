@@ -236,6 +236,7 @@ config.libs = [
         "objects": [
             Object(Matching, "egg/geom/eggSphere.cpp"),
             Object(NonMatching, "egg/math/eggMath.cpp"),
+            Object(Matching, "egg/math/eggQuat.cpp"),
             Object(Matching, "egg/math/eggVector.cpp"),
             Object(Matching, "egg/math/eggBoundBox.cpp"),
             Object(Matching, "egg/core/eggExpHeap.cpp"),
@@ -245,7 +246,7 @@ config.libs = [
             Object(Matching, "egg/core/eggSceneManager.cpp"),
             Object(Matching, "egg/core/eggScene.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
-            Object(Matching, "egg/core/eggArchive.cpp"),
+            Object(Matching, "egg/core/eggArchive.cpp"), 
         ],
     },
 ]
