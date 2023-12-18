@@ -237,6 +237,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggViewport.cpp"),
             Object(Matching, "egg/geom/eggSphere.cpp"),
             Object(NonMatching, "egg/math/eggMath.cpp"),
+            Object(NonMatching, "egg/math/eggMatrix.cpp"),
             Object(Matching, "egg/math/eggQuat.cpp"),
             Object(Matching, "egg/math/eggVector.cpp"),
             Object(Matching, "egg/math/eggBoundBox.cpp"),
