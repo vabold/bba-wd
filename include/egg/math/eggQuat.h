@@ -29,6 +29,16 @@ struct Quatf {
     void slerpTo(const Quatf &q2, f32 t, Quatf &out) const;
     void makeVectorRotation(Vector3f &from, Vector3f &to);
 
+    // Not 100% known, but exits in sead
+    f32 dot(const Quatf &q) const {
+        return w * w + q.v.x * q.v.x + v.y * q.v.y + v.z * q.v.z;
+    }
+
+    // Not 100% known, but exists in sead
+    f32 length() const {
+        return Math<f32>::sqrt(dot(*this));
+    }
+
     void multScalar(f32 s) {
         w *= s;
         v.x *= s;

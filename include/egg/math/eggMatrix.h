@@ -1,10 +1,6 @@
 #pragma once
 
-#include <egg/math/eggMath.h>
 #include <egg/math/eggQuat.h>
-#include <egg/math/eggVector.h>
-
-#include <nw4r/math/types.h>
 
 namespace EGG {
 
@@ -26,35 +22,33 @@ struct Matrix34f {
         return arr[i];
     }
 
-    void inverseTo(Matrix34f &) const;
-    void inverseTransposeTo(Matrix34f &) const;
+    void rotateBaseX(Vector3f &, Matrix34f &);
+    void rotateVectorChange(Vector3f &, Vector3f &, Matrix34f &);
+    void inverseTo33(Matrix34f &) const;
+    void inverseTo(Matrix34f &to) const;
+    void inverseTransposeTo(Matrix34f &to) const;
     void makeIdentity();
+    void calcRPY() const;
     void makeSRT(const Vector3f &s, const Vector3f &r, const Vector3f &t);
     void makeRT(const Vector3f &r, const Vector3f &t);
     void makeR(const Vector3f &r);
     void makeST(const Vector3f &s, const Vector3f &t);
     void makeSQT(const Vector3f &s, const Quatf &q, const Vector3f &t);
+    void makeSQ(const Vector3f &s, const Quatf &q);
+    void makeQT(const Quatf &q, const Vector3f &t);
     void makeQ(const Quatf &q);
     void makeS(const Vector3f &s);
     void makeT(const Vector3f &t);
+    void fromQuat(const Quatf &q);
+    void toQuat(Quatf &q) const;
     void setAxisRotation(const Vector3f &axis, f32 rot);
     Vector3f multVector(const Vector3f &vec) const;
     void multiplyTo(const Matrix34f &m2, Matrix34f &to) const;
-    void loadPosMtx(u32 posMtxId);
-    void dump();
-
-    // NYI
-    void rotateBaseX(Vector3f &, Matrix34f &);
-    void rotateVectorChange(Vector3f &, Vector3f &, Matrix34f &);
-    void inverseTo33(Matrix34f &) const;
-    void calcRPY() const;
-    void makeSQ(const Vector3f &s, const Quatf &q);
-    void makeQT(const Quatf &q, const Vector3f &t);
-    void fromQuat(const Quatf &q);
-    void toQuat(Quatf &q) const;
     void slerpTo(const Matrix34f &from, Matrix34f &to, f32 t);
     void copyTo16(f32 *pf) const;
+    void loadPosMtx(u32 posMtxId);
     void loadNrmMtx(u32 nrmMtxId);
+    void dump();
 
     // Inlines
     void concat(const Matrix34f &, Matrix34f &) const;
@@ -78,10 +72,11 @@ struct Matrix34f {
     void getTranslation(Vector3f &t) const {
         getBase(3, t);
     }
+
     void makeZero() {
-        m[0][3] = m[0][2] = m[0][1] = m[0][0] = 0.0f;
-        m[1][3] = m[1][2] = m[1][1] = m[1][0] = 0.0f;
-        m[2][3] = m[2][2] = m[2][1] = m[2][0] = 0.0f;
+        for (int i = 0; i < 12; i++) {
+            arr[i] = 0.0f;
+        }
     }
 
     union {
