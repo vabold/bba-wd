@@ -30,9 +30,17 @@ egg/geom/eggSphere.cpp:
 	.text       start:0x8016F808 end:0x8016F888
 
 egg/math/eggMath.cpp:
-	extab       start:0x80006F60 end:0x80006F98
-	extabindex  start:0x8000BB58 end:0x8000BBAC
-	.text       start:0x8016F888 end:0x8016F984
+	extab       start:0x80006F60 end:0x80006FA0
+	extabindex  start:0x8000BB58 end:0x8000BBB8
+	.text       start:0x8016F888 end:0x8016FA18
+
+egg/math/eggMatrix.cpp:
+	extab       start:0x80006FA0 end:0x80006FF0
+	extabindex  start:0x8000BBB8 end:0x8000BC00
+	.text       start:0x8016FA18 end:0x801701F0
+	.ctors      start:0x8038C674 end:0x8038C678
+	.bss        start:0x80476AE8 end:0x80476B18
+	.sdata2     start:0x804EA6E0 end:0x804EA6EC
 
 egg/math/eggQuat.cpp:
 	extab       start:0x80006FF0 end:0x80007068

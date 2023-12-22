@@ -73,21 +73,17 @@ void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
     set(cos, sin * axis.x, sin * axis.y, sin * axis.z);
 }
 
-// Found in SS, not BBA(at least with these other funcs)
-// f32 Quatf::norm() {
-//     return w * w + v.dot(v);
-// }
-// void Quatf::normalise() {
-//     f32 mag = Math<f32>::sqrt(norm());
-//     if (mag > 0.0f) {
-//         multScalar(Math<f32>::inv(mag));
-//     }
-// }
+f32 Quatf::norm() {
+    return w * w + v.dot(v);
+}
+void Quatf::normalise() {
+    f32 mag = Math<f32>::sqrt(norm());
+    if (mag > 0.0f) {
+        multScalar(Math<f32>::inv(mag));
+    }
+}
 
 Quatf Quatf::conjugate() {
-    // force sdata2 odering. Normalise introduces it through Math<f32>::inv
-    1.0f;
-
     Quatf q;
     q.w = w;
     q.v = -1.0f * v;

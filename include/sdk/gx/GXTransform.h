@@ -3,10 +3,13 @@
 
 #include <Common.h>
 
+#include <sdk/mtx/mtx.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void GXLoadPosMtxImm(const Mtx, u32 id);
 void GXSetViewport(f32 left, f32 up, f32 width, f32 height, f32, f32);
 void GXSetScissor(u32 left, u32 up, u32 width, u32 height);
 void GXSetScissorBoxOffset(u32, u32);
