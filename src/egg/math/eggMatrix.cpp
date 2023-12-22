@@ -1,5 +1,3 @@
-#pragma once
-
 #include <egg/math/eggMatrix.h>
 
 #include <sdk/gx/GXTransform.h>
@@ -356,12 +354,12 @@ Vector3f Matrix34f::multVector(const Vector3f &vec) const {
     return ret;
 }
 
-void Matrix34f::multiplyTo(const Matrix34f &m2, Matrix34f &to) const {
-    PSMTXConcat(m, m2.m, to.m);
-}
-
 void Matrix34f::loadPosMtx(u32 posMtxId) {
     GXLoadPosMtxImm(m, posMtxId);
+}
+
+void Matrix34f::multiplyTo(const Matrix34f &m2, Matrix34f &to) const {
+    PSMTXConcat(m, m2.m, to.m);
 }
 
 void Matrix34f::dump() {}
