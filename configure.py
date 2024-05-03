@@ -187,6 +187,14 @@ cflags_egg = [
     "-rostr",
 ]
 
+# nw4r library flags
+cflags_nw4r = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-ipa file",
+    "-rostr",
+]
+
 config.linker_version = "GC/3.0a5.2"
 
 
@@ -249,6 +257,15 @@ config.libs = [
             Object(Matching, "egg/core/eggDisposer.cpp"),
             Object(Matching, "egg/core/eggArchive.cpp"),
         ],
+    },
+    {
+        "lib": "nw4r",
+        "mw_version": config.linker_version,
+        "cflags": cflags_nw4r,
+        "host": True,
+        "objects": [
+            Object(NonMatching, "nw4r/ut/ut_list.cpp"),
+        ]
     },
 ]
 

@@ -95,3 +95,6 @@ egg/core/eggArchive.cpp:
 	.data       start:0x803E15D0 end:0x803E15E0
 	.bss        start:0x80477B50 end:0x80477B60
 	.sbss       start:0x804E8608 end:0x804E8610
+
+nw4r/ut/ut_list.cpp:
+	.text       start:0x80299908 end:0x80299BA4
