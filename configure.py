@@ -264,7 +264,7 @@ config.libs = [
         "cflags": cflags_nw4r,
         "host": True,
         "objects": [
-            Object(NonMatching, "nw4r/ut/ut_list.cpp"),
+            Object(Matching, "nw4r/ut/ut_list.cpp"),
         ]
     },
 ]
