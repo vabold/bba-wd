@@ -282,6 +282,7 @@ config.libs = [
         "host": True,
         "objects": [
             Object(NonMatching, "sdk/mem/mem_heapCommon.c"),
+            Object(NonMatching, "sdk/mem/mem_expHeap.c"),
         ],
     },
 ]
