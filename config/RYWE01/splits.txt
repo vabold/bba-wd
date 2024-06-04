@@ -20,6 +20,11 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.dtors      start:0x8038C7E4 end:0x8038C7E8 rename:.dtors$15
 	.sdata      start:0x804E6070 end:0x804E6078
 
+sdk/mem/mem_heapCommon.c:
+	.text       start:0x8010E844 end:0x8010EDF0
+	.bss        start:0x8040DD48 end:0x8040DD70
+	.sbss       start:0x804E8028 end:0x804E8030
+
 egg/gfx/eggViewport.cpp:
 	extab       start:0x80006F18 end:0x80006F40
 	extabindex  start:0x8000BAEC end:0x8000BB28
