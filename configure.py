@@ -27,7 +27,7 @@ from tools.project import (
 # Game versions
 DEFAULT_VERSION = 0
 VERSIONS = [
-    "RYWE01",	# 0
+    "RYWE01",  # 0
 ]
 
 if len(VERSIONS) > 1:
@@ -150,7 +150,7 @@ cflags_base = [
     "-RTTI off",
     "-fp_contract on",
     "-str reuse",
-	"-enc SJIS",
+    "-enc SJIS",
     "-i include",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
@@ -169,7 +169,7 @@ cflags_runtime = [
     "-str reuse,pool,readonly",
     "-gccinc",
     "-common off",
-	"-inline auto",
+    "-inline auto",
 ]
 
 # REL flags
@@ -191,6 +191,13 @@ cflags_egg = [
 cflags_nw4r = [
     *cflags_base,
     "-use_lmw_stmw on",
+    "-ipa file",
+    "-rostr",
+]
+
+# SDK library flags
+cflags_sdk = [
+    *cflags_base,
     "-ipa file",
     "-rostr",
 ]
@@ -266,7 +273,16 @@ config.libs = [
         "host": True,
         "objects": [
             Object(Matching, "nw4r/ut/ut_list.cpp"),
-        ]
+        ],
+    },
+    {
+        "lib": "sdk",
+        "mw_version": config.linker_version,
+        "cflags": cflags_sdk,
+        "host": True,
+        "objects": [
+            Object(NonMatching, "sdk/mem/mem_heapCommon.c"),
+        ],
     },
 ]
 
