@@ -25,6 +25,9 @@ sdk/mem/mem_heapCommon.c:
 	.bss        start:0x8040DD48 end:0x8040DD70
 	.sbss       start:0x804E8028 end:0x804E8030
 
+sdk/mem/mem_expHeap.c:
+	.text       start:0x8010EDF0 end:0x8010FA60
+
 egg/gfx/eggViewport.cpp:
 	extab       start:0x80006F18 end:0x80006F40
 	extabindex  start:0x8000BAEC end:0x8000BB28
