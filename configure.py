@@ -281,7 +281,7 @@ config.libs = [
         "cflags": cflags_sdk,
         "host": True,
         "objects": [
-            Object(NonMatching, "sdk/mem/mem_heapCommon.c"),
+            Object(Matching, "sdk/mem/mem_heapCommon.c"),
             Object(NonMatching, "sdk/mem/mem_expHeap.c"),
         ],
     },
