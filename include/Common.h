@@ -27,8 +27,10 @@ typedef u32 uintptr_t;
 typedef int BOOL;
 enum { FALSE, TRUE };
 
-#define ROUND_UP(num, align) (((u32)(num) + (align) - 1) & (~(align) + 1))
+#define ROUND_UP(num, align) (((u32)(num) + (align)-1) & (~(align) + 1))
+#define ROUND_UP_PTR(ptr, align) ((void *)((((u32)(ptr)) + (align)-1) & (~((align)-1))))
 #define ROUND_DOWN(num, align) ((u32)(num) & (~(align) + 1))
+#define ROUND_DOWN_PTR(ptr, align) ((void *)(((u32)(ptr)) & (~((align)-1))))
 #define PTR_SIZE(start, end) (u32)((u32)(end) - (u32)(start))
 
 #ifdef __cplusplus
