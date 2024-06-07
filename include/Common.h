@@ -22,6 +22,7 @@ typedef float f32;
 typedef float f64;
 
 typedef u32 size_t;
+typedef u32 uintptr_t;
 
 typedef int BOOL;
 enum { FALSE, TRUE };
