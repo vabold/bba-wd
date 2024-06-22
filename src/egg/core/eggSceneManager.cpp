@@ -3,7 +3,7 @@
 #include <egg/core/eggDisplay.h>
 #include <egg/core/eggSystem.h>
 
-#include <sdk/GXMisc.h>
+#include <sdk/gx/GXMisc.h>
 
 namespace EGG {
 
