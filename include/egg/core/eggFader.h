@@ -17,11 +17,8 @@ public:
     virtual EStatus getStatus() const;
     virtual bool fadeIn();
     virtual bool fadeOut();
-    virtual BOOL calc();
+    virtual bool calc();
     virtual void draw();
-
-private:
-    EStatus mStatus;
 };
 
 } // namespace EGG

@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-void GXFlush();
-void GXDrawDone();
+void GXFlush(void);
+void GXDrawDone(void);
 
 #ifdef __cplusplus
 }
