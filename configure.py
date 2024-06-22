@@ -287,7 +287,7 @@ config.libs = [
             Object(Matching, "egg/core/eggHeap.cpp"),
             Object(Matching, "egg/core/eggAllocator.cpp"),
             Object(Matching, "egg/core/eggThread.cpp"),
-            Object(NonMatching, "egg/core/eggColorFader.cpp"),
+            Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggSceneManager.cpp"),
             Object(Matching, "egg/core/eggScene.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
