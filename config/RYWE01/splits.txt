@@ -112,5 +112,8 @@ egg/core/eggArchive.cpp:
 	.bss        start:0x80477B50 end:0x80477B60
 	.sbss       start:0x804E8608 end:0x804E8610
 
+egg/core/eggLongStopWatch.cpp:
+	.text       start:0x8017AABC end:0x8017ABF4
+
 nw4r/ut/ut_list.cpp:
 	.text       start:0x80299908 end:0x80299BA4
