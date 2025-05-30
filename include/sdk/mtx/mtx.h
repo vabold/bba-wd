@@ -9,9 +9,10 @@ extern "C" {
 
 typedef f32 Mtx[3][4];
 
-void PSMTXConcat(const Mtx, const Mtx, Mtx);
-void PSMTXInverse(const Mtx, Mtx);
-void PSMTXInvXpose(const Mtx, Mtx);
+void PSMTXIdentity(Mtx m);
+void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
+void PSMTXInverse(const Mtx src, Mtx inv);
+void PSMTXInvXpose(const Mtx src, Mtx invX);
 
 #ifdef __cplusplus
 }
