@@ -28,6 +28,15 @@ sdk/mem/mem_heapCommon.c:
 sdk/mem/mem_expHeap.c:
 	.text       start:0x8010EDF0 end:0x8010FA60
 
+egg/gfx/eggCamera.cpp:
+	extab       start:0x80006A74 end:0x80006B24
+	extabindex  start:0x8000B864 end:0x8000B8E8
+	.text       start:0x8016B0C0 end:0x8016B858
+	.rodata     start:0x8039F098 end:0x8039F0F0
+	.data       start:0x803E10D0 end:0x803E11A0
+	.sdata      start:0x804E6528 end:0x804E6548
+	.sdata2     start:0x804EA5F0 end:0x804EA610
+
 egg/gfx/eggViewport.cpp:
 	extab       start:0x80006F18 end:0x80006F40
 	extabindex  start:0x8000BAEC end:0x8000BB28
