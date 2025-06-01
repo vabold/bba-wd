@@ -19,6 +19,7 @@ from typing import Any, Dict, List
 
 from tools.project import (
     Object,
+    ProgressCategory,
     ProjectConfig,
     calculate_progress,
     generate_build,
@@ -72,11 +73,6 @@ parser.add_argument(
     help="generate map file(s)",
 )
 parser.add_argument(
-    "--no-asm",
-    action="store_true",
-    help="don't incorporate .s files from asm directory",
-)
-parser.add_argument(
     "--debug",
     action="store_true",
     help="build with debug info (non-matching)",
@@ -95,6 +91,12 @@ parser.add_argument(
     help="path to decomp-toolkit binary or source (optional)",
 )
 parser.add_argument(
+    "--objdiff",
+    metavar="BINARY | DIR",
+    type=Path,
+    help="path to objdiff-cli binary or source (optional)",
+)
+parser.add_argument(
     "--sjiswrap",
     metavar="EXE",
     type=Path,
@@ -111,6 +113,12 @@ parser.add_argument(
     action="store_true",
     help="builds equivalent (but non-matching) or modded objects",
 )
+parser.add_argument(
+    "--no-progress",
+    dest="progress",
+    action="store_false",
+    help="disable progress calculation",
+)
 args = parser.parse_args()
 
 config = ProjectConfig()
@@ -120,23 +128,26 @@ version_num = VERSIONS.index(config.version)
 # Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
+config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
-config.debug = args.debug
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
-if args.no_asm:
+# Don't build asm unless we're --non-matching
+if not config.non_matching:
     config.asm_dir = None
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20231018"
-config.dtk_tag = "v0.9.0"
-config.sjiswrap_tag = "v1.1.1"
-config.wibo_tag = "0.6.14"
+config.compilers_tag = "20250520"
+config.dtk_tag = "v1.5.1"
+config.objdiff_tag = "v3.0.0-beta.8"
+config.sjiswrap_tag = "v1.2.1"
+config.wibo_tag = "0.6.16"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -146,14 +157,18 @@ config.asflags = [
     "--strip-local-absolute",
     "-I include",
     f"-I build/{config.version}/include",
-    f"--defsym version={version_num}",
+    f"--defsym BUILD_VERSION={version_num}",
 ]
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
-    # "-warn off",
-    # "-listclosure", # Uncomment for Wii linkers
 ]
+if args.debug:
+    config.ldflags.append("-g")  # Or -gdwarf-2 for Wii linkers
+if args.map:
+    config.ldflags.append("-mapunused")
+    # config.ldflags.append("-listclosure") # For Wii linkers
+
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
 
@@ -183,7 +198,7 @@ cflags_base = [
 ]
 
 # Debug flags
-if config.debug:
+if args.debug:
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
 else:
     cflags_base.append("-DNDEBUG=1")
@@ -264,7 +279,7 @@ config.libs = [
         "lib": "Runtime.PPCEABI.H",
         "mw_version": config.linker_version,
         "cflags": cflags_runtime,
-        "host": False,
+        "progress_category": "sdk",
         "objects": [
             Object(NonMatching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
             Object(NonMatching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
@@ -274,7 +289,7 @@ config.libs = [
         "lib": "EGG",
         "mw_version": config.linker_version,
         "cflags": cflags_egg,
-        "host": True,
+        "progress_category": "egg",
         "objects": [
             Object(Matching, "egg/gfx/eggViewport.cpp"),
             Object(Matching, "egg/geom/eggSphere.cpp"),
@@ -299,7 +314,7 @@ config.libs = [
         "lib": "nw4r",
         "mw_version": config.linker_version,
         "cflags": cflags_nw4r,
-        "host": True,
+        "progress_category": "nw4r",
         "objects": [
             Object(Matching, "nw4r/ut/ut_list.cpp"),
         ],
@@ -308,12 +323,18 @@ config.libs = [
         "lib": "sdk",
         "mw_version": config.linker_version,
         "cflags": cflags_sdk,
-        "host": True,
+        "progress_category": "sdk",
         "objects": [
             Object(Matching, "sdk/mem/mem_heapCommon.c"),
             Object(Matching, "sdk/mem/mem_expHeap.c"),
         ],
     },
+]
+
+config.progress_categories = [
+    ProgressCategory("sdk", "SDK Code"),
+    ProgressCategory("nw4r", "NW4R Code"),
+    ProgressCategory("egg", "EGG Code"),
 ]
 
 if args.mode == "configure":

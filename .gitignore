@@ -11,3 +11,5 @@ orig/*/*
 /*.txt
 ctx.c
 docs
+objdiff.json
+compile_commands.json
