@@ -291,6 +291,7 @@ config.libs = [
         "cflags": cflags_egg,
         "progress_category": "egg",
         "objects": [
+            Object(NonMatching, "egg/gfx/eggCamera.cpp"),
             Object(Matching, "egg/gfx/eggViewport.cpp"),
             Object(Matching, "egg/geom/eggSphere.cpp"),
             Object(NonMatching, "egg/math/eggMath.cpp"),
